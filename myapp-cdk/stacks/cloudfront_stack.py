@@ -5,7 +5,7 @@
 # Iteration     : Adding WAF and OAC to all origins
 # Purpose       : Creates CloudFront Distribution and its componenets to serve private content
 #
-# Pre-req       : Signer stack and origin stack
+# Pre-req       : Signer stack and waf stack
 #################################################################################################
 
 from aws_cdk import ( # type: ignore
