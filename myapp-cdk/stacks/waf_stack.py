@@ -1,3 +1,13 @@
+################################################################################################# 
+# Author        : Sapan Jain
+# Status        : Working
+# Version       : V2.1
+# Iteration     : Create WAF
+# Purpose       : Creates CloudFront Distribution and its componenets to serve private content
+#
+# Pre-req       : NA
+#################################################################################################
+
 from aws_cdk import Stack
 from aws_cdk import aws_wafv2 as wafv2
 from constructs import Construct
