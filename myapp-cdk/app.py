@@ -12,37 +12,43 @@
 #################################################################################################
 #!/usr/bin/env python3
 import os
-from aws_cdk import App
+from aws_cdk import App, CfnOutput
 
-from stacks.origin_stack import S3Stack
 from stacks.cloudfront_stack import CloudFrontStack
 from stacks.signer_stack import SignerStack
+from stacks.waf_stack import WAFStack
 # --------------------------- #
-APPLICATON_NAME = 'myapp'
+APPLICATON_NAME = 'StreamLearn'
 ENVIRONMENT = 'dev'
+MEMBERSHIP_LEVELS = {
+    'basic': '''YOUR_BASIC_ENCODED_PUBLIC_KEY_HERE''',
+    'standard': '''YOUR_STANDARD_ENCODED_PUBLIC_KEY_HERE''',
+    'premium': '''YOUR_PREMIUM_ENCODED_PUBLIC_KEY_HERE'''
+}
 # --------------------------- #
 app = App()
 # --------------------------- #
-s3_stack = S3Stack(app, "S3OriginStack", application_name=APPLICATON_NAME, environment=ENVIRONMENT)
 signer_stack = SignerStack(app, "SignerStack", 
                            application_name=APPLICATON_NAME, 
                            environment=ENVIRONMENT,
-                           encoded_key='''-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArXj8ZDw5cga8421IqrfX
-7Bf45PZJTEzWfdGCF3suSSuF5ZqVjM6y6rE6Qv0WlHagDq0wJwN2BUhQ11GwkJzx
-aRkjda+w9CGKh+9AQp6KK54KdZW6FGaQBF4RVOGp0oYfYNj7rZKQZDkqcgtqSDra
-THp7U0EcDiXVnFxQOUO3u3h4EoQdtBYMEVo6zI1ve84PAGda0+mUfv0wdNvzIKSn
-lgmEBbCv5UD64J5lgpvHIWPvWqiVSe4yZz5wvrwuq7Bc3aV1X7iDuwxbb5trr+xC
-dV71iLrnKPoh0mXaEXY1g5sRrITr8JPYLi0I5zeUwh9eGtmmxAOkFNG+QmZBaRK6
-twIDAQAB
------END PUBLIC KEY-----'''
+                           encoded_keys=MEMBERSHIP_LEVELS
                            )
-cloudfront_stack = CloudFrontStack(app, "CloudFrontStack",
+# --------------------------- #
+waf_stack = WAFStack(app, "WAFStack",
+                    application_name=APPLICATON_NAME, 
+                    environment=ENVIRONMENT
+                    )
+# --------------------------- #
+content_delivery_stack = CloudFrontStack(app, "CloudFrontStack",
                                    application_name=APPLICATON_NAME, 
                                    environment=ENVIRONMENT,
-                                   bucket=s3_stack.bucket,
-                                   signer_public_key=signer_stack.public_key
+                                   membership_levels = list(MEMBERSHIP_LEVELS.keys()),
+                                   signer_public_keys=signer_stack.public_keys,
+                                   web_acl_id=waf_stack.web_acl.attr_arn
                                    )
 # --------------------------- #
+# Add outputs
+CfnOutput(content_delivery_stack, "BucketName", value=content_delivery_stack.bucket_name)
+CfnOutput(content_delivery_stack, "DistributionDomainName", value=content_delivery_stack.distribution_domain_name)
 app.synth()
 # --------------------------- #
