@@ -135,4 +135,4 @@ The Software is provided "as is", without warranty of any kind, express or impli
 
 Any use of this Software is at your own risk. The author is not responsible for any damages, losses, or consequences that may arise from the use, misuse, or malfunction of the Software. By using this Software, you acknowledge and agree that you assume all risks associated with its use and that the author shall not be held liable for any direct, indirect, incidental, special, exemplary, or consequential damages resulting from the use or inability to use the Software.
 
-For permission requests, please contact: Sapan Jain at jainsapan171@gmail.com
+For permission requests, please contact: [Sapan Jain](https://www.linkedin.com/in/jainsapan17/)
