@@ -12,7 +12,7 @@
 #################################################################################################
 #!/usr/bin/env python3
 import os
-from aws_cdk import App, CfnOutput
+from aws_cdk import App, CfnOutput # type: ignore
 
 from stacks.cloudfront_stack import CloudFrontStack
 from stacks.signer_stack import SignerStack

@@ -8,20 +8,19 @@
 # Pre-req       : Signer stack and origin stack
 #################################################################################################
 
-from aws_cdk import (
+from aws_cdk import ( # type: ignore
     Stack,
     aws_cloudfront as cloudfront, 
     aws_s3 as s3, 
     aws_iam as iam,
-    # aws_wafv2 as wafv2,
     RemovalPolicy
 )
 # from aws_cdk.aws_cloudfront_origins import S3Origin
 import random
 import string
-from aws_cdk.aws_cloudfront_origins import S3BucketOrigin
-from aws_cdk.aws_s3_deployment import BucketDeployment, Source
-from constructs import Construct
+from aws_cdk.aws_cloudfront_origins import S3BucketOrigin # type: ignore
+from aws_cdk.aws_s3_deployment import BucketDeployment, Source # type: ignore
+from constructs import Construct # type: ignore
 
 class CloudFrontStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, application_name: str, environment: str, membership_levels: list, signer_public_keys: dict, web_acl_id: str, **kwargs) -> None:
@@ -36,7 +35,7 @@ class CloudFrontStack(Stack):
             block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
             removal_policy=RemovalPolicy.DESTROY,  # Be cautious with this in production
             auto_delete_objects=True  # Be cautious with this in production
-        )
+        ) 
         self.bucket_name = self.bucket.bucket_name
 
         # Deploy sample content to the bucket
